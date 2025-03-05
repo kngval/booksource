@@ -7,9 +7,14 @@ To run make sure you have *NodeJS* and *npm* installed.
 1. Navigate to the booksource directory
     `cd booksource`
 
-2. Install Dependencies
-    run `npm install` from the terminal
+2. Install Dependencies, Run this command from the terminal
+    ```
+    npm install 
+    ```
 
-3. Start the app 
-    run `npx expo start` from the terminal
+3. Start the app, Run this command from the terminal 
+    ```
+    npx expo start 
+    ```
+    
 
