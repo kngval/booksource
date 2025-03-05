@@ -1,11 +1,13 @@
 # Welcome to booksource ! 
 
-To run make sure you have *NodeJS* and *npm* installed.
+To run make sure you have **NodeJS** and **npm** installed.
 
 # Get Started
 
 1. Navigate to the booksource directory
-    `cd booksource`
+    ```
+    cd booksource
+    ```
 
 2. Install Dependencies, Run this command from the terminal
     ```
