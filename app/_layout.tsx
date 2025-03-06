@@ -1,12 +1,12 @@
-import { ThemeProvider } from "../theme/ThemeProvider";
-import { Stack } from "expo-router";
+import { ThemeProvider } from "@/theme/ThemeProvider";
+import Layout from "./Layout";
+import { StatusBar } from "react-native";
 
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <Stack>
-        <Stack.Screen name="index" />
-      </Stack>
+      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+      <Layout />
     </ThemeProvider>
   )
 }
