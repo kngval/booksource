@@ -5,7 +5,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <Stack>
-        <Stack.Screen name="home" />
+        <Stack.Screen name="index" />
       </Stack>
     </ThemeProvider>
   )

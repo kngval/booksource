@@ -1,4 +1,4 @@
-import { createContext, useState } from "react"
+import { createContext, useContext, useState } from "react"
 
 //for Light Theme
 
@@ -26,5 +26,11 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType|undefined>(undefined);
 
-
+export const useTheme = ():ThemeContextType => {
+  const context = useContext(ThemeContext);
+  if(!context){
+    throw new Error("useTheme must be within a ThemeProvider");
+  }
+  return context;
+};
 
