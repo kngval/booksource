@@ -9,9 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Layout() {
   return (
     <ThemeProvider>
-      <SafeAreaView style={{flex:1}}>
         <RootLayout />
-      </SafeAreaView>
 
     </ThemeProvider>
   )

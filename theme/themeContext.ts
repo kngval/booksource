@@ -11,7 +11,8 @@ export type Theme = {
 export const lightTheme: Theme = {
   background: "#F2EAC5",
   text: "#6F5643",
-  nav : "#947862"
+  // nav : "#947862"
+   nav : "#6F5643"
 };
 
 //for Dark Theme
