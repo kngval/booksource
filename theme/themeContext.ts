@@ -5,17 +5,20 @@ import { createContext, useContext, useState } from "react";
 export type Theme = {
   background: string;
   text: string;
+  nav : string;
 };
 
 export const lightTheme: Theme = {
   background: "#F2EAC5",
   text: "#6F5643",
+  nav : "#947862"
 };
 
 //for Dark Theme
 export const darkTheme: Theme = {
   background: "#14161B",
-  text: "#fff",
+  text: "#F2EAC5",
+  nav: "#1E1E1E"
 };
 
 interface ThemeContextType {
