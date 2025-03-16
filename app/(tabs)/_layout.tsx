@@ -2,6 +2,7 @@ import BookMarkIcon from "@/assets/bookmarkSvg";
 import FilterSvg from "@/assets/filterSvg";
 import HomeIcon from "@/assets/homeSvg";
 import UserIcon from "@/assets/userSvg";
+import MenuButton from "@/components/Menu";
 import { useTheme } from "@/theme/themeContext";
 import { Tabs } from "expo-router";
 import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
@@ -10,15 +11,15 @@ export default function TabsLayout() {
   return (
     <Tabs screenOptions={{
       tabBarStyle: {
-        width:330,
-        height:80,
+        width: 360,
+        height: 80,
         backgroundColor: theme.nav,
         borderTopLeftRadius: 28,
         borderTopRightRadius: 28,
         alignSelf: "center",
         alignItems: "center",
-        flexDirection : "row",
-        paddingBottom:Platform.OS === "android" ? 20 : 0
+        flexDirection: "row",
+        paddingBottom: Platform.OS === "android" ? 20 : 0
       },
 
     }}>
@@ -45,12 +46,10 @@ export default function TabsLayout() {
         headerRight: () => (
           <View style={styles.rightContainer}>
             <FilterSvg width={25} height={25} color={theme.text} />
-            <TouchableOpacity style={styles.menuContainer}>
-              <View style={{ ...styles.menu, backgroundColor: theme.text }}></View>
-              <View style={{ ...styles.menu, backgroundColor: theme.text }}></View>
-              <View style={{ ...styles.menu, backgroundColor: theme.text }}></View>
-            </TouchableOpacity>
+
+            <MenuButton />
           </View>
+
         ),
       }} />
 
@@ -106,18 +105,8 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   rightContainer: {
-    marginRight: 16, // Align to the right
     flexDirection: "row",
     gap: 10
 
-  },
-  menuContainer: {
-    // flexDirection: "column",
-  },
-  menu: {
-    width: 5,
-    height: 5,
-    borderRadius: 3, // Half of width/height for a perfect circle
-    marginVertical: 1.2, // Adds spacing between dots
   },
 });
