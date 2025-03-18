@@ -4,7 +4,6 @@ import { StatusBar } from "react-native";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import * as NavigationBar from "expo-navigation-bar"
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Layout() {
   return (
