@@ -1,33 +1,50 @@
 import { useTheme } from "@/theme/themeContext";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { PaperProvider, Menu } from "react-native-paper";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function MenuButton() {
   const { theme } = useTheme();
-  const [visible, setVisibility] = useState<boolean>(false);
-
+  const [visibility, setVisibility] = useState<boolean>(false);
   return (
-    <PaperProvider>
-      <View>
-        <Menu
-          visible={visible}
-          onDismiss={() => setVisibility(false)}
-          anchor={
-            <TouchableOpacity onPress={() => setVisibility(true)} style={styles.anchorButton}>
-              <View style={styles.dotsContainer}>
-                <View style={{ ...styles.menuStyle, backgroundColor: theme.text }} />
-                <View style={{ ...styles.menuStyle, backgroundColor: theme.text }} />
-                <View style={{ ...styles.menuStyle, backgroundColor: theme.text }} />
-              </View>
-            </TouchableOpacity>
-          }
-          contentStyle={styles.menuContainer} // Fix: Restrict menu size
-        >
-          <Menu.Item onPress={() => console.log("Import Books")} title="Import Books" />
-        </Menu>
-      </View>
-    </PaperProvider>
+    <>
+      <TouchableOpacity onPress={() => setVisibility(!visibility)}>
+        <View style={{ ...styles.menuStyle, backgroundColor: theme.text }}></View>
+        <View style={{ ...styles.menuStyle, backgroundColor: theme.text }}></View>
+        <View style={{ ...styles.menuStyle, backgroundColor: theme.text }}></View>
+      </TouchableOpacity>
+
+      {/* MENU POPUP */}
+
+      {visibility === true && (
+        <View style={{
+          backgroundColor: theme.background,
+          elevation:5,
+          position: "absolute",
+          gap: 15,
+          top: 35,
+          right: 0,
+          zIndex: 10,
+          padding: 15
+        }}>
+          <TouchableOpacity>
+            <Text style={{ color: theme.text, fontSize:17 }}>Import Books</Text>
+             
+          </TouchableOpacity>
+
+
+          <TouchableOpacity>
+            <Text style={{ color: theme.text, fontSize:17 }}>Import Books</Text>
+             
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+            <Text style={{ color: theme.text, fontSize:17 }}>Import Books</Text>
+             
+          </TouchableOpacity>
+        </View>
+      )}
+
+    </>
   );
 }
 
@@ -42,8 +59,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   menuStyle: {
-    width: 5,
-    height: 5,
+    width: 6,
+    height: 6,
     borderRadius: 3,
     marginVertical: 1.2,
   },
