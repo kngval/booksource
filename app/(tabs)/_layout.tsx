@@ -16,10 +16,11 @@ export default function TabsLayout() {
         backgroundColor: theme.nav,
         borderTopLeftRadius: 28,
         borderTopRightRadius: 28,
+        borderColor:theme.nav,
         alignSelf: "center",
         alignItems: "center",
         flexDirection: "row",
-        paddingBottom: Platform.OS === "android" ? 20 : 0
+        paddingBottom: Platform.OS === "android" ? 30 : 0
       },
 
     }}>
@@ -32,7 +33,7 @@ export default function TabsLayout() {
         },
         tabBarLabel: "",
         tabBarIcon: () => (
-          <HomeIcon width={25} height={30} color={theme.background} />
+          <HomeIcon width={25} height={30} color={theme.tabIcon} />
         )
         ,
         headerStyle: {
@@ -46,7 +47,6 @@ export default function TabsLayout() {
         headerRight: () => (
           <View style={styles.rightContainer}>
             <FilterSvg width={25} height={25} color={theme.text} />
-
             <MenuButton />
           </View>
 
@@ -62,9 +62,9 @@ export default function TabsLayout() {
           fontSize: 25,
           color: theme.text,
         },
-        tabBarLabel: "",
+        tabBarLabel:"",
         tabBarIcon: () => (
-          <UserIcon width={30} height={30} color={theme.background} />
+          <UserIcon width={30} height={30} color={theme.tabIcon} />
         )
         ,
         headerStyle: {
@@ -87,7 +87,7 @@ export default function TabsLayout() {
         },
         tabBarLabel: "",
         tabBarIcon: () => (
-          <BookMarkIcon width={30} height={30} color={theme.background} />
+          <BookMarkIcon width={30} height={30} color={theme.tabIcon} />
         )
         ,
         headerStyle: {
@@ -106,7 +106,7 @@ export default function TabsLayout() {
 const styles = StyleSheet.create({
   rightContainer: {
     flexDirection: "row",
-    gap: 10
-
+    gap: 25,
+    marginRight:20
   },
 });
