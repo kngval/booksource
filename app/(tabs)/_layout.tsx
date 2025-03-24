@@ -5,7 +5,7 @@ import UserIcon from "@/assets/userSvg";
 import MenuButton from "@/components/Menu";
 import { useTheme } from "@/theme/themeContext";
 import { Tabs } from "expo-router";
-import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 export default function TabsLayout() {
   const { theme } = useTheme();
   return (

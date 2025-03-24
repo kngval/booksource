@@ -1,10 +1,29 @@
 import { useTheme } from "@/theme/themeContext";
 import { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function MenuButton() {
   const { theme } = useTheme();
   const [visibility, setVisibility] = useState<boolean>(false);
+
+  const pickEpubFile = async() => {
+   try {
+      console.log("Testing");
+      const result = await DocumentPicker.getDocumentAsync({
+        type:"application/epub+zip",
+        copyToCacheDirectory: true
+      })
+
+      if(result.canceled){
+        console.log("User canceled file selection");
+        return;
+      };
+      console.log("SELECTED FILE : ", result.assets[0]);
+    } catch(error){
+      console.error("Error picking file: ", error);
+    }
+  }
   return (
     <>
       <TouchableOpacity onPress={() => setVisibility(!visibility)}>
@@ -26,8 +45,8 @@ export default function MenuButton() {
           zIndex: 10,
           padding: 15
         }}>
-          <TouchableOpacity>
-            <Text style={{ color: theme.text, fontSize:17 }}>Import Books</Text>
+          <TouchableOpacity onPress={() => pickEpubFile()}>
+            <Text style={{ color: theme.text, fontSize:17 }}>Import</Text>
              
           </TouchableOpacity>
 
