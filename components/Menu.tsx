@@ -2,9 +2,10 @@ import { useTheme } from "@/theme/themeContext";
 import { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
-
+import { useFile } from "@/books/BookContext";
 export default function MenuButton() {
-  const { theme } = useTheme();
+  const { theme,toggleTheme } = useTheme();
+  const { setSelectedFile } = useFile();
   const [visibility, setVisibility] = useState<boolean>(false);
 
   const pickEpubFile = async() => {
@@ -20,13 +21,14 @@ export default function MenuButton() {
         return;
       };
       console.log("SELECTED FILE : ", result.assets[0]);
+      setSelectedFile(result.assets[0].uri);
     } catch(error){
       console.error("Error picking file: ", error);
     }
   }
   return (
     <>
-      <TouchableOpacity onPress={() => setVisibility(!visibility)}>
+      <TouchableOpacity style={{ width:10 }} onPress={() => setVisibility(!visibility)}>
         <View style={{ ...styles.menuStyle, backgroundColor: theme.text }}></View>
         <View style={{ ...styles.menuStyle, backgroundColor: theme.text }}></View>
         <View style={{ ...styles.menuStyle, backgroundColor: theme.text }}></View>
@@ -36,7 +38,7 @@ export default function MenuButton() {
 
       {visibility === true && (
         <View style={{
-          backgroundColor: theme.background,
+          backgroundColor: theme.menu,
           elevation:5,
           position: "absolute",
           gap: 15,
@@ -51,8 +53,8 @@ export default function MenuButton() {
           </TouchableOpacity>
 
 
-          <TouchableOpacity>
-            <Text style={{ color: theme.text, fontSize:17 }}>Import Books</Text>
+          <TouchableOpacity onPress={() => toggleTheme()}>
+            <Text style={{ color: theme.text, fontSize:17 }}>Theme Switch Test</Text>
              
           </TouchableOpacity>
 
@@ -82,9 +84,5 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
     marginVertical: 1.2,
-  },
-  menuContainer: {
-    width: 150, // 🚀 **Fix: Set a proper width for the menu**
-    paddingVertical: 5, // 🚀 **Fix: Reduce unnecessary spacing**
   },
 });

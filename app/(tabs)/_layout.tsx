@@ -11,11 +11,11 @@ export default function TabsLayout() {
   return (
     <Tabs screenOptions={{
       tabBarStyle: {
-        width: 360,
+        width: "100%",
         height: 80,
         backgroundColor: theme.nav,
-        borderTopLeftRadius: 28,
-        borderTopRightRadius: 28,
+        // borderTopLeftRadius: 28,
+        // borderTopRightRadius: 28,
         borderColor:theme.nav,
         alignSelf: "center",
         alignItems: "center",
