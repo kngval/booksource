@@ -10,7 +10,6 @@ export default function HomeScreen() {
   useEffect(() => {
     const loadCover = async() => {
       try{
-        const book = Epub(selectedFile);
       }catch(error){
 
       }
