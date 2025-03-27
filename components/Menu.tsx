@@ -2,10 +2,12 @@ import { useTheme } from "@/theme/themeContext";
 import { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { useFile } from "@/books/BookContext";
+import Epub from "epubjs";
 export default function MenuButton() {
   const { theme,toggleTheme } = useTheme();
-  const { setSelectedFile } = useFile();
+  const { selectedFile,setSelectedFile } = useFile();
   const [visibility, setVisibility] = useState<boolean>(false);
 
   const pickEpubFile = async() => {
@@ -21,7 +23,18 @@ export default function MenuButton() {
         return;
       };
       console.log("SELECTED FILE : ", result.assets[0]);
-      setSelectedFile(result.assets[0].uri);
+
+      const fileUri = result.assets[0].uri;
+      const fileContent = await FileSystem.readAsStringAsync(fileUri,{
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const epubBlob = `data:application/epub+zip;base64,${fileContent}`;
+
+      const book = Epub(epubBlob)
+      // await book.ready;
+      console.log('BOOK EPUB : ', book);
+
+      console.log("BOOK : ",selectedFile);
     } catch(error){
       console.error("Error picking file: ", error);
     }
