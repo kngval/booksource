@@ -1,19 +1,21 @@
 import { useTheme } from "@/theme/themeContext";
-import { lazy, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { useFile } from "@/books/BookContext";
-import ePub, { Book } from "epubjs";
 import Epub from "epubjs";
+import { WebView } from "react-native-webview";
 
 export default function MenuButton() {
   const { theme,toggleTheme } = useTheme();
   const { selectedFile,setSelectedFile } = useFile();
   const [visibility, setVisibility] = useState<boolean>(false);
+  const [cover,setCover] = useState<string | null>(null);
 
   const pickEpubFile = async() => {
    try {
+      //FILE SELECTION
       console.log("Testing");
       const result = await DocumentPicker.getDocumentAsync({
         type:"application/epub+zip",
@@ -25,23 +27,41 @@ export default function MenuButton() {
       };
       const { uri,name } = result.assets[0];
       console.log("SELECTED FILE  : ", name,uri);
+
       const base64Content = await FileSystem.readAsStringAsync(uri, {
         encoding : FileSystem.EncodingType.Base64,
       });
+
       const binaryString = atob(base64Content);
-      const len = binaryString.length;
-      const buffer = new ArrayBuffer(len);
+      const buffer = new ArrayBuffer(binaryString.length);
       const view = new Uint8Array(buffer);
-      for(let i = 0; i < len; i++){
+      for(let i = 0; i < binaryString.length; i++){
         view[i] = binaryString.charCodeAt(i)
       }
-      const bookInstance = Epub(buffer);
-      const metadata = await bookInstance.loaded.metadata;
+
+      const book = Epub(buffer);
+      const metadata = await book.loaded.metadata;
       console.log("BOOK METADATA : ", metadata);
+
+      const cover = await book.loaded.cover;
+      const cover64 = await book.archive.getBase64(cover);
+      console.log("cover :" ,cover64);
+      setCover(cover64);
+
     } catch(error){
       console.error("Error picking file: ", error);
     }
   }
+
+  const blobToBase64 = async(blob:Blob):Promise<string> => {
+    return new Promise ((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    })
+  }
+
+  // const extractCoverImage = async(book) => {}
   return (
     <>
       <TouchableOpacity style={{ width:10 }} onPress={() => setVisibility(!visibility)}>
@@ -78,6 +98,9 @@ export default function MenuButton() {
             <Text style={{ color: theme.text, fontSize:17 }}>Import Books</Text>
              
           </TouchableOpacity>
+          {cover && (
+            <Image source={{uri:cover}} style={{ width:100,height:100 }}/>
+          )}
         </View>
       )}
 
