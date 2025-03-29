@@ -7,10 +7,12 @@
     "scheme": "booksource",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "jsEngine":"hermes",
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["READ_EXTERNAL_STORAGE"], 
       "adaptiveIcon": {
         "foregroundImage": "",
         "backgroundColor": "#ffffff"

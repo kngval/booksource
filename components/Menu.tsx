@@ -1,10 +1,12 @@
 import { useTheme } from "@/theme/themeContext";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { useFile } from "@/books/BookContext";
+import ePub, { Book } from "epubjs";
 import Epub from "epubjs";
+
 export default function MenuButton() {
   const { theme,toggleTheme } = useTheme();
   const { selectedFile,setSelectedFile } = useFile();
@@ -15,26 +17,27 @@ export default function MenuButton() {
       console.log("Testing");
       const result = await DocumentPicker.getDocumentAsync({
         type:"application/epub+zip",
-        copyToCacheDirectory: true
+        // copyToCacheDirectory: true
       })
-
       if(result.canceled){
         console.log("User canceled file selection");
         return;
       };
-      console.log("SELECTED FILE : ", result.assets[0]);
-
-      const fileUri = result.assets[0].uri;
-      const fileContent = await FileSystem.readAsStringAsync(fileUri,{
-        encoding: FileSystem.EncodingType.Base64,
+      const { uri,name } = result.assets[0];
+      console.log("SELECTED FILE  : ", name,uri);
+      const base64Content = await FileSystem.readAsStringAsync(uri, {
+        encoding : FileSystem.EncodingType.Base64,
       });
-      const epubBlob = `data:application/epub+zip;base64,${fileContent}`;
-
-      const book = Epub(epubBlob)
-      // await book.ready;
-      console.log('BOOK EPUB : ', book);
-
-      console.log("BOOK : ",selectedFile);
+      const binaryString = atob(base64Content);
+      const len = binaryString.length;
+      const buffer = new ArrayBuffer(len);
+      const view = new Uint8Array(buffer);
+      for(let i = 0; i < len; i++){
+        view[i] = binaryString.charCodeAt(i)
+      }
+      const bookInstance = Epub(buffer);
+      const metadata = await bookInstance.loaded.metadata;
+      console.log("BOOK METADATA : ", metadata);
     } catch(error){
       console.error("Error picking file: ", error);
     }
