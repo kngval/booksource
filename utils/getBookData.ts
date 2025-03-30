@@ -1,7 +1,9 @@
-import Epub from "epubjs";
+
+import Epub, { Book } from "epubjs";
 import * as FileSystem from "expo-file-system";
 
-export const getBookData = async (uri: string) => {
+export const getBookData = async (uri : string):Promise<Book> => {
+
   const base64Content = await FileSystem.readAsStringAsync(uri, {
     encoding: FileSystem.EncodingType.Base64,
   });
@@ -14,6 +16,5 @@ export const getBookData = async (uri: string) => {
   }
 
   const book = Epub(buffer);
-  const metadata = await book.loaded.metadata;
-  console.log("BOOK METADATA : ", metadata);
-};
+  return book;
+}
