@@ -26,11 +26,11 @@ export default function MenuButton() {
 
 
       const book = await getBookData(uri);
-      
-
+      const metadata = await book.loaded.metadata; 
+      console.log("Metadata: ", metadata);
+       
       const cover = await book.loaded.cover;
       const cover64 = await book.archive.getBase64(cover);
-      console.log("cover :" ,cover64);
       setCover(cover64);
 
     } catch(error){
