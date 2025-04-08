@@ -1,0 +1,3 @@
+- Create Book context
+- add a cover field in  TBookMetadata and provide the bookId to the .jpg file 
+- add the base64 image to the .jpg file
