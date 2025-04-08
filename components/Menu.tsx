@@ -2,7 +2,10 @@ import { useTheme } from "@/theme/themeContext";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { getBookData } from "@/utils/getBookData";
+import { importBook } from "@/utils/importBooks";
+import { TBookMetaData } from "@/types/book.types";
 
 export default function MenuButton() {
   const { theme,toggleTheme } = useTheme();
@@ -15,12 +18,12 @@ export default function MenuButton() {
       console.log("Testing");
       const result = await DocumentPicker.getDocumentAsync({
         type:"application/epub+zip",
-        // copyToCacheDirectory: true
       })
       if(result.canceled){
         console.log("User canceled file selection");
         return;
       };
+
       const { uri,name } = result.assets[0];
       console.log("SELECTED FILE  : ", name,uri);
 
@@ -28,7 +31,15 @@ export default function MenuButton() {
       const book = await getBookData(uri);
       const metadata = await book.loaded.metadata; 
       console.log("Metadata: ", metadata);
+      const bookMetadata:TBookMetaData = {
+        title: metadata.title,
+        creator: metadata.creator,
+        description: metadata.description,
+      }
+
+      await importBook(uri,bookMetadata);
        
+      
       const cover = await book.loaded.cover;
       const cover64 = await book.archive.getBase64(cover);
       setCover(cover64);
