@@ -1,28 +1,16 @@
-import { useFile } from "@/books/BookContext";
 import { useTheme } from "@/theme/themeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Epub from "epubjs";
 export default function HomeScreen() {
   const { theme } = useTheme();
-  const { selectedFile } = useFile();
 
   useEffect(() => {
-    const loadEpub = async () => {
-      if (!selectedFile) {
-        console.log("file error");
-        return;
-      }
-
-      try {
-        const book = Epub(selectedFile);  
-        await book.ready;
-        console.log("Book : ", book);
-      } catch (error) {
-        console.error("Error loading epub : ", error);
-      }
-    };
-    loadEpub();
+    const loadBooks = async () => {
+      const jsonValue = await AsyncStorage.getItem('library');
+      console.log('📚 Your library:', jsonValue != null ? JSON.parse(jsonValue) : []);
+    }
+    loadBooks();
   }, []);
 
   return (
