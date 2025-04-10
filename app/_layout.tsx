@@ -4,12 +4,15 @@ import { StatusBar } from "react-native";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import * as NavigationBar from "expo-navigation-bar"
 import { useEffect } from "react";
+import { LibraryProvider } from "@/books/BookContext";
 
 //TSX
 export default function Layout() {
   return (
     <ThemeProvider>
+      <LibraryProvider>
         <RootLayout />
+      </LibraryProvider>
     </ThemeProvider>
   )
 }
