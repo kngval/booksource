@@ -1,26 +1,23 @@
 import * as FileSystem from "expo-file-system";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TBookMetaData } from "@/types/book.types";
-
+import { v4 as uuidv4 } from 'uuid';
 
 export const importBook = async (bookUri: string, bookMetaData: TBookMetaData) => {
 
-  const newPath = `${FileSystem.documentDirectory}${bookMetaData.title}.epub`
+  const id = uuidv4();
+  const newPath = `${FileSystem.documentDirectory}${id}.epub`
   console.log("New Path : ", newPath);
   await FileSystem.copyAsync({
     from: bookUri,
     to: newPath
   })
-  bookMetaData.path = newPath;
-  console.log("NEW Book metadata : ", bookMetaData);
-  addBookToLibrary(bookMetaData);
+  const newBook:TBookMetaData = {
+    ...bookMetaData,
+    path : newPath
+  }
+
+  console.log("NEW Book metadata : ", newBook);
+  return newBook;
 }
 
-const addBookToLibrary = async (book:TBookMetaData):Promise<void> => {
-  const jsonValue = await AsyncStorage.getItem('library');
-  const currentLibrary:typeof book[] = jsonValue != null ? JSON.parse(jsonValue) : [];
-  currentLibrary.push(book);
-  await AsyncStorage.setItem('library',JSON.stringify(currentLibrary));
-
-}
 
