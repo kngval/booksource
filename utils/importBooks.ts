@@ -19,5 +19,3 @@ export const importBook = async (bookUri: string, bookMetaData: TBookMetaData) =
   console.log("NEW Book metadata : ", newBook);
   return newBook;
 }
-
-
