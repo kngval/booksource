@@ -1,27 +1,50 @@
+import { useLibrary } from "@/books/BookContext";
 import { useTheme } from "@/theme/themeContext";
+import { TBookMetaData } from "@/types/book.types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 export default function HomeScreen() {
   const { theme } = useTheme();
-
+  const { library, loadLibrary, deleteBook } = useLibrary();
   useEffect(() => {
-    const loadBooks = async () => {
-      const jsonValue = await AsyncStorage.getItem('library');
-      console.log('📚 Your library:', jsonValue != null ? JSON.parse(jsonValue) : []);
-    }
-    loadBooks();
-  }, []);
+    // deleteBook();
+
+    loadLibrary();
+  }, [library]);
+
+  const renderBook = ({ item }: { item: TBookMetaData }) => {
+    return (
+      <View style={{ elevation:2,borderWidth:0.1,marginHorizontal:2 }}>
+        <Image
+          source={{ uri: item.cover }}
+          style={{ width: 110, height: 150 }}
+        />
+
+        <Text style={{ color: theme.text, width: 100, textAlign: "center", fontWeight: 800, marginVertical: 10 }}>{item.title}</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={{ ...styles.wrapper, backgroundColor: theme.background }}>
-      <Text>HELLO HOME</Text>
-    </View>
+    <FlatList
+      data={library}
+      keyExtractor={(item) => item.id}
+      renderItem={renderBook}
+      contentContainerStyle={[styles.wrapper, { backgroundColor: theme.background }]}
+      numColumns={3}
+      showsVerticalScrollIndicator={false}
+      
+    />
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
+    paddingHorizontal: 8,
+    gap: 5,
+    height:"100%",
+    paddingBottom:50
+
   },
 });
