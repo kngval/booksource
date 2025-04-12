@@ -12,7 +12,7 @@ export default function MenuButton() {
   const [visibility, setVisibility] = useState<boolean>(false);
   const [cover,setCover] = useState<string | null>(null);
 
-  const { addBook } = useLibrary();
+  const { addBook,loadLibrary } = useLibrary();
 
   const pickEpubFile = async() => {
    try {
@@ -28,25 +28,9 @@ export default function MenuButton() {
 
       const { uri,name } = result.assets[0];
       console.log("SELECTED FILE  : ", name,uri);
-
-
-      const book = await getBookData(uri);
-      const metadata = await book.loaded.metadata; 
-      console.log("Metadata: ", metadata);
-
-      const bookMetadata:TBookMetaData = {
-        title: metadata.title,
-        creator: metadata.creator,
-        description: metadata.description,
-      }
-
-      const importedBook = await importBook(uri,bookMetadata);
-       
+      //IMPORT BOOK
+      const importedBook = await importBook(uri);
       await addBook(importedBook);
-      
-      const cover = await book.loaded.cover;
-      const cover64 = await book.archive.getBase64(cover);
-      setCover(cover64);
 
     } catch(error){
       console.error("Error picking file: ", error);
