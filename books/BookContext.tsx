@@ -6,6 +6,7 @@ type TLibraryContext = {
   library: TBookMetaData[];
   addBook: (book: TBookMetaData) => Promise<void>;
   loadLibrary : () => Promise<void>;
+  deleteBook : () => Promise<void>;
 }
 
 const LibraryContext = createContext<TLibraryContext | null>(null)
@@ -25,6 +26,7 @@ export const LibraryProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const loadLibrary = async() => {
     const jsonValue = await AsyncStorage.getItem("library");
     const books = jsonValue ? JSON.parse(jsonValue) : [];
+    console.log(books);
     setLibrary(books);
   }
 
@@ -34,11 +36,17 @@ export const LibraryProvider: React.FC<{ children: React.ReactNode }> = ({ child
     await AsyncStorage.setItem('library', JSON.stringify(updated));
   }
 
+  const deleteBook = async():Promise<void> => {
+    await AsyncStorage.clear();  
+    console.log("Storage Cleared");
+  }
+
+
   useEffect(() => {
     loadLibrary();
   },[])
   return (
-    <LibraryContext.Provider value={{ library, addBook,loadLibrary }}>
+    <LibraryContext.Provider value={{ library, addBook,loadLibrary,deleteBook }}>
       {children}
     </LibraryContext.Provider>
   )
