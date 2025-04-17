@@ -32,6 +32,7 @@ export default function MenuButton() {
       const importedBook = await importBook(uri);
       await addBook(importedBook);
 
+
     } catch(error){
       console.error("Error picking file: ", error);
     }

@@ -25,9 +25,9 @@ export const LibraryProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const loadLibrary = async() => {
     const jsonValue = await AsyncStorage.getItem("library");
-    const books = jsonValue ? JSON.parse(jsonValue) : [];
-    console.log(books);
-    setLibrary(books);
+    const books: TBookMetaData[] = jsonValue ? JSON.parse(jsonValue) : [];
+    books.map((b) => console.log("LIBRARY : ",b.title,b.cover ));
+    setLibrary(books); 
   }
 
   const addBook = async (book: TBookMetaData) => {

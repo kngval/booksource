@@ -7,20 +7,23 @@
     "scheme": "booksource",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "jsEngine":"hermes",
+    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["READ_EXTERNAL_STORAGE"], 
+      "permissions": [
+        "READ_EXTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kngval.booksource"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "static"
     },
     "plugins": [
       "expo-router",
@@ -35,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f0d7bac2-7cdf-4601-aa82-70de41755d91"
+      }
     }
   }
 }
