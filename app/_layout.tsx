@@ -31,10 +31,22 @@ function RootLayout() {
       <Stack screenOptions={
         {
           contentStyle: { backgroundColor: theme.background },
-          headerTintColor: theme.text
+          headerTintColor: theme.text,
+          animation:'slide_from_right',
         }
       }>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="books" 
+          options={{ 
+            headerShown: true,
+            headerTitle:"",
+            headerShadowVisible: false,
+            headerStyle : {
+            backgroundColor: theme.background
+            }
+          }}
+        />
       </Stack>
     </>
   )
