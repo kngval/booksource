@@ -13,5 +13,3 @@ export default function UserScreen(){
 }
 
 
-const styles = StyleSheet.create({
-})
