@@ -99,6 +99,7 @@ export default function TabsLayout() {
           borderBottomWidth: 0,
         },
       }} />
+
     </Tabs>
   )
 }
