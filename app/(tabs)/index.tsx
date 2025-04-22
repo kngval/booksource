@@ -16,23 +16,23 @@ export default function HomeScreen() {
 
   const renderBook = ({ item }: { item: TBookMetaData }) => {
     return (
-      <Pressable onPress={() => router.push(`/books/${item.id}`)} style={{ elevation: 2, borderWidth: 0.1, marginHorizontal: 2, alignItems: "center", paddingBottom: 10 }}>
-        <View >
+      <Pressable onPress={() => router.push(`/books/${item.id}`)} style={{ alignItems: "center", paddingBottom: 10, marginHorizontal:8}}>
+        <View style={{ alignItems:"center" }}>
           {item.cover && (
             <Image
               source={{ uri: item.cover }}
-              style={{ width: 110, height: 160 }}
+              style={{ width: 100, height: 170,borderRadius:5,borderColor:theme.text,borderWidth:2 }}
             />
           )}
 
-          <Text style={{ color: theme.text, width: 100, textAlign: "center", fontWeight: 600, marginVertical: 10, flexWrap: "wrap" }}>{item.title}</Text>
+          <Text style={{ color: theme.text, width: 100, textAlign: "center",fontSize:12, fontWeight: 700, marginTop:8,flexWrap: "wrap" }}>{item.title}</Text>
         </View>
       </Pressable>
     );
   }
 
   return (
-    <View style={{ width: "100%", height: "100%", backgroundColor: theme.background, paddingHorizontal: 5, alignItems: "center" }}>
+    <View style={{ width: "100%", height: "100%", backgroundColor: theme.background, alignItems: "center" }}>
       <FlatList
         data={library}
         keyExtractor={(item) => item.id}
@@ -48,9 +48,6 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 5,
-    // alignSelf: "center",
     paddingBottom: 50,
-    flexWrap: "wrap"
   },
 });
