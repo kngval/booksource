@@ -6,13 +6,14 @@ import MenuButton from "@/components/Menu";
 import { useTheme } from "@/theme/themeContext";
 import { Tabs } from "expo-router";
 import { View, StyleSheet, Platform } from "react-native";
+
 export default function TabsLayout() {
   const { theme } = useTheme();
   return (
     <Tabs screenOptions={{
       tabBarStyle: {
         width: "100%",
-        height: 80,
+        height: 70,
         backgroundColor: theme.nav,
         // borderTopLeftRadius: 28,
         // borderTopRightRadius: 28,
@@ -28,12 +29,13 @@ export default function TabsLayout() {
         title: "All Books",
         headerTitleStyle: {
           fontWeight: 700,
-          fontSize: 25,
+          fontSize: 20,
           color: theme.text,
+          
         },
         tabBarLabel: "",
         tabBarIcon: () => (
-          <HomeIcon width={25} height={30} color={theme.tabIcon} />
+          <HomeIcon width={20} height={25} color={theme.tabIcon} />
         )
         ,
         headerStyle: {
@@ -46,7 +48,7 @@ export default function TabsLayout() {
         },
         headerRight: () => (
           <View style={styles.rightContainer}>
-            <FilterSvg width={25} height={25} color={theme.text} />
+            <FilterSvg width={20} height={20} color={theme.text} />
             <MenuButton />
           </View>
 
@@ -64,7 +66,7 @@ export default function TabsLayout() {
         },
         tabBarLabel:"",
         tabBarIcon: () => (
-          <UserIcon width={30} height={30} color={theme.tabIcon} />
+          <UserIcon width={25} height={25} color={theme.tabIcon} />
         )
         ,
         headerStyle: {
@@ -87,7 +89,7 @@ export default function TabsLayout() {
         },
         tabBarLabel: "",
         tabBarIcon: () => (
-          <BookMarkIcon width={30} height={30} color={theme.tabIcon} />
+          <BookMarkIcon width={25} height={25} color={theme.tabIcon} />
         )
         ,
         headerStyle: {
