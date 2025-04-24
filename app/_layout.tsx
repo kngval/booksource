@@ -1,10 +1,10 @@
 import { useTheme } from "@/theme/themeContext";
-import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import * as NavigationBar from "expo-navigation-bar"
 import { useEffect } from "react";
 import { LibraryProvider } from "@/books/BookContext";
+import { Stack } from "expo-router";
 
 //TSX
 export default function Layout() {
@@ -32,19 +32,29 @@ function RootLayout() {
         {
           contentStyle: { backgroundColor: theme.background },
           headerTintColor: theme.text,
-          animation:'slide_from_right',
+          
         }
       }>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+        <
+          Stack.Screen 
+          name="(tabs)" 
+          options={{ 
+            headerShown: false,
+            animation:"slide_from_left",
+            animationDuration:500
+          }} 
+        />
         <Stack.Screen 
-          name="books" 
+          name="books/[id]" 
           options={{ 
             headerShown: true,
             headerTitle:"",
             headerShadowVisible: false,
             headerStyle : {
             backgroundColor: theme.background
-            }
+            },
+            
           }}
         />
       </Stack>
