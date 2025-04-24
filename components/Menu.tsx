@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   menuStyle: {
-    width: 6,
-    height: 6,
+    width: 5,
+    height: 5,
     borderRadius: 3,
     marginVertical: 1.2,
   },
