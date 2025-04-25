@@ -2,17 +2,14 @@ import { useTheme } from "@/theme/themeContext";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
-import { getBookData } from "@/utils/getBookData";
 import { importBook } from "@/utils/importBooks";
-import { TBookMetaData } from "@/types/book.types";
 import { useLibrary } from "@/books/BookContext";
 
 export default function MenuButton() {
   const { theme,toggleTheme } = useTheme();
   const [visibility, setVisibility] = useState<boolean>(false);
-  const [cover,setCover] = useState<string | null>(null);
 
-  const { addBook,loadLibrary } = useLibrary();
+  const { addBook } = useLibrary();
 
   const pickEpubFile = async() => {
    try {
@@ -27,6 +24,7 @@ export default function MenuButton() {
       };
 
       const { uri,name } = result.assets[0];
+
       console.log("SELECTED FILE  : ", name,uri);
       //IMPORT BOOK
       const importedBook = await importBook(uri);
