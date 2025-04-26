@@ -4,5 +4,5 @@ export type TBookMetaData = {
   path?:string;
   creator:string;
   description:string;
-  cover:string;
+  cover:string | null;
 }
