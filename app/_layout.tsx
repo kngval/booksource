@@ -26,7 +26,6 @@ function RootLayout() {
     NavigationBar.setVisibilityAsync("hidden");
     NavigationBar.setBehaviorAsync("overlay-swipe");
   }, [theme.background])
-const [menuVisibility, setMenuVisibility] = useState(false);
   return (
     <>
       <StatusBar backgroundColor={theme.background} />
@@ -50,7 +49,7 @@ const [menuVisibility, setMenuVisibility] = useState(false);
             headerShadowVisible: false,
             headerTitleStyle: {
               fontWeight: 700,
-              fontSize: 20,
+              fontSize: 19,
               color: theme.text,
             },
             animation: "slide_from_left",
