@@ -74,7 +74,6 @@ function RootLayout() {
             headerStyle: {
               backgroundColor: theme.background
             },
-
             animation: "slide_from_right",
           }}
         />
