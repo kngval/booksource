@@ -35,7 +35,7 @@ export const LibraryProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }
 
   const addBook = async (book: TBookMetaData) => {
-    const updated = [...library, book];
+    const updated = [book,...library];
     setLibrary(updated);
     await AsyncStorage.setItem('library', JSON.stringify(updated));
   }
