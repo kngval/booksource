@@ -52,7 +52,6 @@ function RootLayout() {
               fontSize: 19,
               color: theme.text,
             },
-            animation: "slide_from_left",
             animationDuration: 500,
 
             headerRight: () => (
@@ -76,6 +75,7 @@ function RootLayout() {
               backgroundColor: theme.background
             },
 
+            animation: "slide_from_right",
           }}
         />
       </Stack>
