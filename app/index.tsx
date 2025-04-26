@@ -10,9 +10,10 @@ import { setVisibilityAsync } from "expo-navigation-bar";
 import { ImportIcon } from "@/assets/importSvg";
 import { DarkModeIcon } from "@/assets/darkModeSvg";
 import { LightModeIcon } from "@/assets/lightModeSvg";
+import BookIcon from "@/assets/bookSvg";
 export default function HomeScreen() {
   const { theme, toggleTheme } = useTheme();
-  const { library, loadLibrary, addBook } = useLibrary();
+  const { library, deleteBook, loadLibrary, addBook } = useLibrary();
   const [menuVisibility, setMenuVisibility] = useState<boolean>(false);
   const router = useRouter();
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function HomeScreen() {
       console.log("SELECTED FILE  : ", name, uri);
       //IMPORT BOOK
       const importedBook = await importBook(uri);
+      setMenuVisibility(false);
       await addBook(importedBook);
 
 
@@ -49,7 +51,7 @@ export default function HomeScreen() {
     return (
       <Link
         href={`/books/${item.id}`}
-        style={{ alignItems: "center", paddingBottom: 10, marginHorizontal: 8 }}>
+        style={{ alignItems: "center", paddingBottom: 10, marginHorizontal: 5 }}>
 
         <View style={{ alignItems: "center" }}>
           {item.cover && (
@@ -66,15 +68,23 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={{ width: "100%", height: "100%", backgroundColor: theme.background, position: "relative",alignItems:"center" }}>
-      <FlatList
-        data={library}
-        keyExtractor={(item) => item.id}
-        renderItem={renderBook}
-        contentContainerStyle={styles.wrapper}
-        numColumns={3}
-        showsVerticalScrollIndicator={false}
-      />
+    <View style={{ width: "100%", height: "100%", backgroundColor: theme.background, position: "relative", paddingHorizontal: 12 }}>
+      {library.length > 0 ? (
+        <FlatList
+          data={library}
+          keyExtractor={(item) => item.id}
+          renderItem={renderBook}
+          contentContainerStyle={styles.wrapper}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View style={{ alignItems:"center",justifyContent:"center",height:"80%" }}>
+            <BookIcon width={100} height={100} color={theme.text}/>
+            <Text style={{ color:theme.text, fontSize:16,fontWeight:700,width:"90%",textAlign:"center",marginTop:5 }}>There are currently no books in your library.</Text>
+        </View>
+        )
+      }
 
       <Modal
         visible={menuVisibility}
@@ -98,34 +108,34 @@ export default function HomeScreen() {
         >
           <ScrollView>
 
-              <TouchableOpacity onPress={() => pickEpubFile()} style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <TouchableOpacity onPress={() => pickEpubFile()} style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 }}>
 
-                <ImportIcon width={20} height={20} color={theme.text} />
-                <Text style={{ color: theme.text,fontWeight:700,fontSize:16 }}>Import Books</Text>
+              <ImportIcon width={20} height={20} color={theme.text} />
+              <Text style={{ color: theme.text, fontWeight: 700, fontSize: 16 }}>Import Books</Text>
 
-              </TouchableOpacity>
+            </TouchableOpacity>
 
-              {theme.background == "#F2EAC5" ? (
+            {theme.background == "#F2EAC5" ? (
               <TouchableOpacity onPress={() => toggleTheme()} style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 }}>
 
                 <DarkModeIcon width={20} height={20} color={theme.text} />
-                <Text style={{ color: theme.text,fontWeight:700,fontSize:16 }}>Dark Mode</Text>
+                <Text style={{ color: theme.text, fontWeight: 700, fontSize: 16 }}>Dark Mode</Text>
 
               </TouchableOpacity>
-              ) : (
+            ) : (
 
               <TouchableOpacity onPress={() => toggleTheme()} style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 }}>
 
                 <LightModeIcon width={20} height={20} color={theme.text} />
-                <Text style={{ color: theme.text,fontWeight:700,fontSize:16 }}>Light Mode</Text>
-                  </TouchableOpacity>
-              )}
+                <Text style={{ color: theme.text, fontWeight: 700, fontSize: 16 }}>Light Mode</Text>
+              </TouchableOpacity>
+            )}
 
           </ScrollView>
 
 
           <TouchableOpacity onPress={() => setMenuVisibility(!menuVisibility)} style={{ width: "100%", backgroundColor: theme.background, position: "absolute", bottom: 20, alignItems: "center", alignSelf: "center", }}>
-            <Text style={{ color: theme.text,  textAlign: "center",fontWeight:700 }}>Close</Text>
+            <Text style={{ color: theme.text, textAlign: "center", fontWeight: 700 }}>Close</Text>
 
           </TouchableOpacity>
         </View>
@@ -142,7 +152,7 @@ export default function HomeScreen() {
           elevation: 10,
           bottom: 20,
           right: 20,
-          backgroundColor: theme.background,
+          backgroundColor: theme.background == "#F2EAC5" ? theme.background : theme.menu,
 
         }}
         >
