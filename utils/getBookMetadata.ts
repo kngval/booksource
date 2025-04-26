@@ -1,4 +1,3 @@
-import Epub from "epubjs";
 import { PackagingMetadataObject } from "epubjs/types/packaging";
 import { getBookData } from "./getBookData";
 
