@@ -2,20 +2,22 @@ import { useLibrary } from "@/books/BookContext";
 import { useTheme } from "@/theme/themeContext";
 import { TBookMetaData } from "@/types/book.types";
 import { useEffect, useState } from "react";
-import { FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { ActivityIndicator, FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Link } from "expo-router";
 import * as DocumentPicker from "expo-document-picker";
 import { importBook } from "@/utils/importBooks";
-import { setVisibilityAsync } from "expo-navigation-bar";
 import { ImportIcon } from "@/assets/importSvg";
 import { DarkModeIcon } from "@/assets/darkModeSvg";
 import { LightModeIcon } from "@/assets/lightModeSvg";
 import BookIcon from "@/assets/bookSvg";
+
+
+//TSX
 export default function HomeScreen() {
   const { theme, toggleTheme } = useTheme();
   const { library, deleteBook, loadLibrary, addBook } = useLibrary();
   const [menuVisibility, setMenuVisibility] = useState<boolean>(false);
-  const router = useRouter();
+  const [loadingBook, setLoadingBook] = useState<boolean>(false)
   useEffect(() => {
     // deleteBook();
     loadLibrary();
@@ -34,20 +36,30 @@ export default function HomeScreen() {
       };
 
       const { uri, name } = result.assets[0];
-
       console.log("SELECTED FILE  : ", name, uri);
+
+      setMenuVisibility(false);
+      setLoadingBook(true);
       //IMPORT BOOK
       const importedBook = await importBook(uri);
-      setMenuVisibility(false);
       await addBook(importedBook);
 
 
     } catch (error) {
       console.error("Error picking file: ", error);
+    }finally {
+      setLoadingBook(false);
     }
   }
 
   const renderBook = ({ item }: { item: TBookMetaData }) => {
+    if(item.id === "loading"){
+      return(
+        <View style={{ width:100,height:170,justifyContent:"center" }}>
+          <ActivityIndicator size={36} color={theme.text}/>
+        </View>
+      )
+    }
     return (
       <Link
         href={`/books/${item.id}`}
@@ -71,19 +83,20 @@ export default function HomeScreen() {
     <View style={{ width: "100%", height: "100%", backgroundColor: theme.background, position: "relative", paddingHorizontal: 12 }}>
       {library.length > 0 ? (
         <FlatList
-          data={library}
+          data={[...(loadingBook ? [{ id:"loading",title:"importing book",creator:"val",cover:null,description:"..." }] : []),...library]}
           keyExtractor={(item) => item.id}
           renderItem={renderBook}
           contentContainerStyle={styles.wrapper}
           numColumns={3}
           showsVerticalScrollIndicator={false}
         />
+
       ) : (
-        <View style={{ alignItems:"center",justifyContent:"center",height:"80%" }}>
-            <BookIcon width={100} height={100} color={theme.text}/>
-            <Text style={{ color:theme.text, fontSize:16,fontWeight:700,width:"90%",textAlign:"center",marginTop:5 }}>There are currently no books in your library.</Text>
+        <View style={{ alignItems: "center", justifyContent: "center", height: "80%" }}>
+          <BookIcon width={100} height={100} color={theme.text} />
+          <Text style={{ color: theme.text, fontSize: 16, fontWeight: 700, width: "90%", textAlign: "center", marginTop: 5 }}>There are currently no books in your library.</Text>
         </View>
-        )
+      )
       }
 
       <Modal
@@ -163,6 +176,7 @@ export default function HomeScreen() {
           </View>
         </TouchableOpacity>
       )}
+
     </View>
   );
 }
