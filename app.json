@@ -16,7 +16,6 @@
         "READ_EXTERNAL_STORAGE"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "",
         "backgroundColor": "#ffffff"
       },
       "package": "com.kngval.booksource"
@@ -27,8 +26,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-      ]
     ],
     "experiments": {
       "typedRoutes": true
