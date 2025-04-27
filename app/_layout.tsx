@@ -77,6 +77,19 @@ function RootLayout() {
             animation: "slide_from_right",
           }}
         />
+
+        <Stack.Screen
+          name="books/reading/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: theme.background
+            },
+            animation: "slide_from_right",
+          }}
+        />
       </Stack>
     </>
   )

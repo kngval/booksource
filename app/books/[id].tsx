@@ -2,7 +2,7 @@ import { useLibrary } from "@/books/BookContext";
 import { lightTheme, useTheme } from "@/theme/themeContext";
 import { TBookMetaData } from "@/types/book.types";
 import { useNavigation } from "@react-navigation/native";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import HTMLView from "react-native-htmlview"
@@ -31,7 +31,7 @@ export default function BookDetails() {
         <>
           <View style={{ alignItems: "center", marginTop: 50, marginBottom: 80 }}>
             <Image
-              source={{ uri: book.cover }}
+              source={{ uri: book.cover != null ? book.cover : "" }}
               style={{ width: 180, height: 300,borderRadius:5 }}
             />
           </View>
@@ -40,9 +40,9 @@ export default function BookDetails() {
             <Text style={{ color: theme.background == "#F2EAC5" ? theme.background: theme.text, fontSize: 22, fontWeight: 900 }}>{book.title}</Text>
             <Text style={{ color: theme.background == "#F2EAC5" ? theme.background: theme.text, fontSize: 15, marginBottom: 20,fontStyle:"italic" }}> - {book.creator}</Text>
 
-            <Pressable onPress={() => console.log("test")}>
+            <Link href={`/books/reading/${book.id}`}>
               <Text>Read</Text>
-            </Pressable>
+            </Link>
 
 
             <Text style={{ fontSize:18,color:theme.background == "#F2EAC5" ? theme.background: theme.text,fontWeight:700,marginBottom:5 }}>Description</Text>
