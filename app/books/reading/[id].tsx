@@ -48,6 +48,7 @@ export default function ReadingScreen() {
   }
   return (
     <ScrollView style={{ height: "100%" }}>
+
     </ScrollView>
   )
 }
