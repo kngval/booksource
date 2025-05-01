@@ -2,7 +2,7 @@ import { useTheme } from "@/theme/themeContext";
 import { StatusBar, View } from "react-native";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import * as NavigationBar from "expo-navigation-bar"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { LibraryProvider } from "@/books/BookContext";
 import { Stack } from "expo-router";
 import FilterSvg from "@/assets/filterSvg";
