@@ -3,7 +3,7 @@ import { useTheme } from "@/theme/themeContext";
 import { getBookData } from "@/utils/getBookData";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { WebView } from "react-native-webview";
 export default function ReadingScreen() {
   const [loadingBook, setLoadingBook] = useState<boolean>(false);
