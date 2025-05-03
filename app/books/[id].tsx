@@ -1,10 +1,9 @@
 import { useLibrary } from "@/books/BookContext";
-import { lightTheme, useTheme } from "@/theme/themeContext";
+import { useTheme } from "@/theme/themeContext";
 import { TBookMetaData } from "@/types/book.types";
-import { useNavigation } from "@react-navigation/native";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import HTMLView from "react-native-htmlview"
 export default function BookDetails() {
   const [book, setBook] = useState<TBookMetaData | null>(null);
