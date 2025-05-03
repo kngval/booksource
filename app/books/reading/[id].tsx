@@ -25,9 +25,7 @@ export default function ReadingScreen() {
         if (book.path) {
           const unzippedEpub = await unzipEpub(book.path);
           const opfPath = await getOpfPath(unzippedEpub);
-          console.log("Opf : ",opfPath);
-
-
+          const spine = await getBookSpine(unzippedEpub,opfPath);
         }
       }
     } catch (err) {
@@ -35,7 +33,6 @@ export default function ReadingScreen() {
     } finally {
       setLoadingBook(false);
     }
-
   }
 
   const unzipEpub = async(epubUri : string):Promise<JSZip> => {
@@ -58,8 +55,34 @@ export default function ReadingScreen() {
       removeNSPrefix:true
     });
     const xml = parser.parse(containerXml);
-    console.log("XML : " ,xml);
     return xml.container.rootfiles.rootfile['@_full-path'];
+  }
+
+  const getBookSpine = async(zip : JSZip, opfPath : string):Promise<void> => {
+    const rawOpfText = await zip.file(opfPath)?.async('text');
+    if(!rawOpfText) throw new Error("Opf not found");
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix:'@_',
+      processEntities : true,
+      ignoreDeclaration: true,
+      removeNSPrefix:true
+    });
+    const opf = parser.parse(rawOpfText);
+
+    const manifest = Array.isArray(opf.package.manifest.item) ? opf.package.manifest.item : [opf.package.manifest.item];
+    
+    const spine = Array.isArray(opf.package.spine.itemref) ? opf.package.spine.itemref : opf.package.spine.itemref;
+    const idToHref = new Map();
+
+    for(const item of manifest){
+      idToHref.set(item['@_id'], item['@_href']);
+    }
+    idToHref.forEach(i => console.log(i))
+
+    const opfBase = opfPath.split('/').slice(0,-1).join('/');
+    const ss = spine.map((s:{ '@_idref' : string }) => `${opfBase}/${idToHref.get(s['@_idref'])}`);
+    return ss;
   }
 
 
