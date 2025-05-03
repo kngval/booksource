@@ -8,7 +8,7 @@ import * as FileSystem from "expo-file-system";
 import { XMLParser } from "fast-xml-parser";
 export default function ReadingScreen() {
   const [loadingBook, setLoadingBook] = useState<boolean>(false);
-  const [bookHtml, setBookHtml] = useState<string | null>(null);
+  // const [bookHtml, setBookHtml] = useState<string | null>(null);
   const { library } = useLibrary();
   const { theme } = useTheme();
   const { id } = useLocalSearchParams();
