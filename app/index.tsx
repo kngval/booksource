@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import * as DocumentPicker from "expo-document-picker";
+import * as NavigationBar from "expo-navigation-bar";
 import { importBook } from "@/utils/importBooks";
 import { ImportIcon } from "@/assets/importSvg";
 import { DarkModeIcon } from "@/assets/darkModeSvg";
@@ -44,7 +45,7 @@ export default function HomeScreen() {
       const importedBook = await importBook(uri);
       await addBook(importedBook);
 
-
+      await NavigationBar.setVisibilityAsync("hidden"); 
     } catch (error) {
       console.error("Error picking file: ", error);
     }finally {
@@ -163,8 +164,8 @@ export default function HomeScreen() {
           justifyContent: "center",
           alignItems: "center",
           elevation: 10,
-          bottom: 20,
-          right: 20,
+          bottom: 50,
+          right: 30,
           backgroundColor: theme.background == "#F2EAC5" ? theme.background : theme.menu,
 
         }}

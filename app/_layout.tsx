@@ -22,13 +22,18 @@ export default function Layout() {
 function RootLayout() {
   const { theme } = useTheme();
   useEffect(() => {
-    NavigationBar.setBackgroundColorAsync(theme.background);
-    NavigationBar.setVisibilityAsync("hidden");
-    NavigationBar.setBehaviorAsync("overlay-swipe");
+    hideNavBar();
   }, [theme.background])
+
+  const hideNavBar = async () => {
+    await NavigationBar.setBackgroundColorAsync(theme.background);
+    await NavigationBar.setVisibilityAsync("hidden");
+    await NavigationBar.setBehaviorAsync("overlay-swipe");
+    console.log("hiding navs");
+  }
   return (
     <>
-      <StatusBar backgroundColor={theme.background} />
+      <StatusBar translucent backgroundColor={theme.background} />
       <Stack screenOptions={
         {
           contentStyle: { backgroundColor: theme.background },
@@ -36,7 +41,6 @@ function RootLayout() {
 
         }
       }>
-
         <
           Stack.Screen
           name="index"

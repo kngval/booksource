@@ -86,6 +86,8 @@ export default function ReadingScreen() {
   }
 
 
+
+
   if (loadingBook) {
     return (
       <View style={{

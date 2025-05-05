@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "booksource",
-    "slug": "booksource",
+    "name": "vivlion",
+    "slug": "vivlion",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "booksource",
+    "scheme": "vivlion",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "jsEngine": "hermes",
@@ -18,7 +18,7 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "package": "com.kngval.booksource"
+      "package": "com.kngval.vivlion"
     },
     "web": {
       "bundler": "metro",
