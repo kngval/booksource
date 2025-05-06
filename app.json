@@ -9,7 +9,8 @@
     "newArchEnabled": true,
     "jsEngine": "hermes",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kngval.vivlion"
     },
     "android": {
       "permissions": [
@@ -25,7 +26,7 @@
       "output": "static"
     },
     "plugins": [
-      "expo-router",
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
