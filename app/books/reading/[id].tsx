@@ -3,13 +3,14 @@ import { useTheme } from "@/theme/themeContext";
 import { useLocalSearchParams } from "expo-router";
 import JSZip from "jszip";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { XMLParser } from "fast-xml-parser";
+import { WebView } from 'react-native-webview';
+
 export default function ReadingScreen() {
   const [loadingBook, setLoadingBook] = useState<boolean>(false);
-  // const [bookHtml, setBookHtml] = useState<string | null>(null);
-  const [bookView,setBookView] = useState<string | null>(null);
+  const [bookView, setBookView] = useState<string | null>(null);
   const { library } = useLibrary();
   const { theme } = useTheme();
   const { id } = useLocalSearchParams();
@@ -17,7 +18,8 @@ export default function ReadingScreen() {
   useEffect(() => {
     loadBook();
   }, [])
-  const loadBook = async () => { try {
+  const loadBook = async () => {
+    try {
       setLoadingBook(true);
       const book = library.find(b => b.id == id);
       console.log("Passed Book : ", book?.title)
@@ -26,7 +28,7 @@ export default function ReadingScreen() {
           const unzippedEpub = await unzipEpub(book.path);
           const opfPath = await getOpfPath(unzippedEpub);
           const spine = await getBookSpine(unzippedEpub, opfPath);
-          const htmlContent = await getCombinedHtml(unzippedEpub,spine);
+          const htmlContent = await getCombinedHtml(unzippedEpub, spine);
           console.log("HTML CONTENT : ", htmlContent);
           setBookView(htmlContent);
         }
@@ -87,7 +89,7 @@ export default function ReadingScreen() {
 
   }
 
-  const getCombinedHtml = async(zip:JSZip, paths:string[]):Promise<string> => {
+  const getCombinedHtml = async (zip: JSZip, paths: string[]): Promise<string> => {
     // const htmlParts = await Promise.all(
     //   paths.map(async(path) => {
     //     const file = await zip.file(path)?.async('text');
@@ -95,8 +97,38 @@ export default function ReadingScreen() {
     //   })
     // );
     // return htmlParts.join('\n');
-    const htmlContent = await zip.file(paths[2])?.async('text');
-    return htmlContent ?? "";
+    const htmlContent = await zip.file(paths[15])?.async('text');
+    if (!htmlContent) return "";
+
+    const styledHtml = htmlContent.replace(
+      /<head[^>]*>/i,
+      match => `${match}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <style>
+        body {
+            font-size: 0.8rem !important;
+            background-color: ${theme.background};
+            padding-left:1rem;
+            padding-right:1rem;
+          }
+          h2{
+
+            text-align: center;
+          }
+         a {
+            color:${theme.text};
+            font-size: 1.5rem
+          }
+          p{
+            color: ${theme.text}
+          }
+          .indented {
+            text-indent: 2rem;
+          }
+      </style>`
+
+    );
+    return styledHtml ?? "";
   }
 
 
@@ -115,11 +147,10 @@ export default function ReadingScreen() {
     )
   }
   return (
-    <ScrollView>
-      {bookView && (
-      <Text>{bookView}</Text>
-      )}
-    </ScrollView>
-
+    <WebView
+      originWhitelist={['*']}
+      source={{ html: bookView ?? "" }}
+      setBuiltInZoomControls={false}
+    />
   )
 }

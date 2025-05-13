@@ -6,15 +6,18 @@
     "orientation": "portrait",
     "scheme": "vivlion",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
+    "edgeToEdgeEnabled":false,
     "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kngval.vivlion"
     },
     "android": {
+    "edgeToEdgeEnabled":false,
       "permissions": [
-        "READ_EXTERNAL_STORAGE"
+        "READ_EXTERNAL_STORAGE",
+        "INTERNET"
       ],
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
@@ -38,6 +41,7 @@
       "eas": {
         "projectId": "f0d7bac2-7cdf-4601-aa82-70de41755d91"
       }
-    }
+    },
+    "owner": "kngval"
   }
 }

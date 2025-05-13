@@ -26,14 +26,13 @@ function RootLayout() {
   }, [theme.background])
 
   const hideNavBar = async () => {
-    await NavigationBar.setBackgroundColorAsync(theme.background);
-    await NavigationBar.setVisibilityAsync("hidden");
-    await NavigationBar.setBehaviorAsync("overlay-swipe");
+    // await NavigationBar.setBackgroundColorAsync(theme.background);
+    // await NavigationBar.setVisibilityAsync("hidden");
+    // await NavigationBar.setBehaviorAsync("overlay-swipe");
     console.log("hiding navs");
   }
   return (
     <>
-      <StatusBar translucent backgroundColor={theme.background} />
       <Stack screenOptions={
         {
           contentStyle: { backgroundColor: theme.background },

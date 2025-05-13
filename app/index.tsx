@@ -45,19 +45,19 @@ export default function HomeScreen() {
       const importedBook = await importBook(uri);
       await addBook(importedBook);
 
-      await NavigationBar.setVisibilityAsync("hidden"); 
+      await NavigationBar.setVisibilityAsync("hidden");
     } catch (error) {
       console.error("Error picking file: ", error);
-    }finally {
+    } finally {
       setLoadingBook(false);
     }
   }
 
   const renderBook = ({ item }: { item: TBookMetaData }) => {
-    if(item.id === "loading"){
-      return(
-        <View style={{ width:100,height:170,justifyContent:"center" }}>
-          <ActivityIndicator size={36} color={theme.text}/>
+    if (item.id === "loading") {
+      return (
+        <View style={{ width: 100, height: 170, justifyContent: "center" }}>
+          <ActivityIndicator size={36} color={theme.text} />
         </View>
       )
     }
@@ -84,7 +84,7 @@ export default function HomeScreen() {
     <View style={{ width: "100%", height: "100%", backgroundColor: theme.background, position: "relative", paddingHorizontal: 12 }}>
       {library.length > 0 ? (
         <FlatList
-          data={[...(loadingBook ? [{ id:"loading",title:"importing book",creator:"val",cover:null,description:"..." }] : []),...library]}
+          data={[...(loadingBook ? [{ id: "loading", title: "importing book", creator: "val", cover: null, description: "..." }] : []), ...library]}
           keyExtractor={(item) => item.id}
           renderItem={renderBook}
           contentContainerStyle={styles.wrapper}
