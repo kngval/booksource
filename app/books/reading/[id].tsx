@@ -82,8 +82,8 @@ export default function ReadingScreen() {
     for (const item of manifest) {
       idToHref.set(item['@_id'], item['@_href']);
     }
-    idToHref.forEach(i => console.log(i))
 
+    idToHref.forEach(i => console.log(i))
     const opfBase = opfPath.split('/').slice(0, -1).join('/');
     return spine.map((s: { '@_idref': string }) => `${opfBase}/${idToHref.get(s['@_idref'])}`);
 
@@ -97,7 +97,9 @@ export default function ReadingScreen() {
     //   })
     // );
     // return htmlParts.join('\n');
-    const htmlContent = await zip.file(paths[15])?.async('text');
+
+
+    const htmlContent = await zip.file(paths[20])?.async('text');
     if (!htmlContent) return "";
 
     const styledHtml = htmlContent.replace(
@@ -110,17 +112,18 @@ export default function ReadingScreen() {
             background-color: ${theme.background};
             padding-left:1rem;
             padding-right:1rem;
+            color:${theme.text};
           }
           h2{
-
             text-align: center;
+            font-size: 1.5rem;
           }
          a {
-            color:${theme.text};
-            font-size: 1.5rem
+            font-size: 1.5rem;
           }
           p{
-            color: ${theme.text}
+            color: ${theme.text};
+            text-indent: 2rem;
           }
           .indented {
             text-indent: 2rem;
