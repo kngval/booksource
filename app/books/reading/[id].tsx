@@ -28,7 +28,9 @@ export default function ReadingScreen() {
           const unzippedEpub = await unzipEpub(book.path);
           const opfPath = await getOpfPath(unzippedEpub);
           const spine = await getBookSpine(unzippedEpub, opfPath);
+          spine.forEach(i => console.log("FINAL SPINE : ", i));
           const htmlContent = await getCombinedHtml(unzippedEpub, spine);
+
           console.log("HTML CONTENT : ", htmlContent);
           setBookView(htmlContent);
         }
@@ -63,6 +65,7 @@ export default function ReadingScreen() {
   }
 
   const getBookSpine = async (zip: JSZip, opfPath: string): Promise<string[]> => {
+    console.log("OPF PATH : ", opfPath);
     const rawOpfText = await zip.file(opfPath)?.async('text');
     if (!rawOpfText) throw new Error("Opf not found");
     const parser = new XMLParser({
@@ -74,19 +77,30 @@ export default function ReadingScreen() {
     });
     const opf = parser.parse(rawOpfText);
 
+    console.log("OPF : ", opf);
+    console.log("MANIFEST : ",opf.package.manifest.item);
+
     const manifest = Array.isArray(opf.package.manifest.item) ? opf.package.manifest.item : [opf.package.manifest.item];
 
     const spine = Array.isArray(opf.package.spine.itemref) ? opf.package.spine.itemref : opf.package.spine.itemref;
+    console.log("SPINE : ",opf.package.spine.itemref);
+
     const idToHref = new Map();
 
     for (const item of manifest) {
       idToHref.set(item['@_id'], item['@_href']);
     }
+    idToHref.forEach(i => console.log("SPINE MAP : ",i));
 
-    idToHref.forEach(i => console.log(i))
+    if(opfPath.includes("/")){
     const opfBase = opfPath.split('/').slice(0, -1).join('/');
     return spine.map((s: { '@_idref': string }) => `${opfBase}/${idToHref.get(s['@_idref'])}`);
+    }
+    
+    const opfB = opfPath.split('.').slice(0,-1).join('/');
 
+    console.log("NEW OPF BASE : ", opfB);
+    return spine.map((s: { '@_idref': string }) => `${idToHref.get(s['@_idref'])}`);
   }
 
   const getCombinedHtml = async (zip: JSZip, paths: string[]): Promise<string> => {
@@ -120,10 +134,12 @@ export default function ReadingScreen() {
           }
          a {
             font-size: 1.5rem;
+            color:${theme.text};
           }
           p{
             color: ${theme.text};
             text-indent: 2rem;
+            font-size: 1rem
           }
           .indented {
             text-indent: 2rem;
@@ -132,6 +148,8 @@ export default function ReadingScreen() {
 
     );
     return styledHtml ?? "";
+
+    // return htmlContent;
   }
 
 
