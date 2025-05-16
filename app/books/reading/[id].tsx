@@ -7,6 +7,7 @@ import { ActivityIndicator, ScrollView, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { XMLParser } from "fast-xml-parser";
 import { WebView } from 'react-native-webview';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ReadingScreen() {
   const [loadingBook, setLoadingBook] = useState<boolean>(false);
@@ -18,23 +19,28 @@ export default function ReadingScreen() {
   useEffect(() => {
     loadBook();
   }, [])
-  const loadBook = async () => {
+
+  //helpers for caching
+  const getSpineCacheKey = (id: string) => `book-spine-${id}`;
+  const getHtmlCachePath = (id: string, index: number) => `${FileSystem.cacheDirectory}epub-${id}-html-${index}.xhtml`;
+
+  //load book function
+  const loadBook = async (): Promise<void> => {
     try {
       setLoadingBook(true);
       const book = library.find(b => b.id == id);
-      console.log("Passed Book : ", book?.title)
-      if (book) {
-        if (book.path) {
-          const unzippedEpub = await unzipEpub(book.path);
-          const opfPath = await getOpfPath(unzippedEpub);
-          const spine = await getBookSpine(unzippedEpub, opfPath);
-          spine.forEach(i => console.log("FINAL SPINE : ", i));
-          const htmlContent = await getCombinedHtml(unzippedEpub, spine);
+      if (!book || !book.path) return;
+      console.log("Passed Book : ", book.title)
+      console.log("Passed Book ID: ", book.id)
+      // const cachedSpineRaw = await AsyncStorage.getItem(getSpineCacheKey(book.id));
 
-          console.log("HTML CONTENT : ", htmlContent);
-          setBookView(htmlContent);
-        }
-      }
+      const unzippedEpub = await unzipEpub(book.path);
+      const opfPath = await getOpfPath(unzippedEpub);
+      const spine = await getBookSpine(unzippedEpub, opfPath);
+      spine.forEach(i => console.log("FINAL SPINE : ", i));
+      const htmlContent = await getCombinedHtml(unzippedEpub, spine);
+
+      setBookView(htmlContent);
     } catch (err) {
       console.error(err);
     } finally {
@@ -78,43 +84,36 @@ export default function ReadingScreen() {
     const opf = parser.parse(rawOpfText);
 
     console.log("OPF : ", opf);
-    console.log("MANIFEST : ",opf.package.manifest.item);
+    console.log("MANIFEST : ", opf.package.manifest.item);
 
     const manifest = Array.isArray(opf.package.manifest.item) ? opf.package.manifest.item : [opf.package.manifest.item];
 
     const spine = Array.isArray(opf.package.spine.itemref) ? opf.package.spine.itemref : opf.package.spine.itemref;
-    console.log("SPINE : ",opf.package.spine.itemref);
+    console.log("SPINE : ", opf.package.spine.itemref);
 
     const idToHref = new Map();
 
     for (const item of manifest) {
       idToHref.set(item['@_id'], item['@_href']);
     }
-    idToHref.forEach(i => console.log("SPINE MAP : ",i));
+    idToHref.forEach(i => console.log("SPINE MAP : ", i));
 
-    if(opfPath.includes("/")){
-    const opfBase = opfPath.split('/').slice(0, -1).join('/');
-    return spine.map((s: { '@_idref': string }) => `${opfBase}/${idToHref.get(s['@_idref'])}`);
+    if (opfPath.includes("/")) {
+      const opfBase = opfPath.split('/').slice(0, -1).join('/');
+      return spine.map((s: { '@_idref': string }) => `${opfBase}/${idToHref.get(s['@_idref'])}`);
     }
-    
-    const opfB = opfPath.split('.').slice(0,-1).join('/');
+
+    const opfB = opfPath.split('.').slice(0, -1).join('/');
 
     console.log("NEW OPF BASE : ", opfB);
     return spine.map((s: { '@_idref': string }) => `${idToHref.get(s['@_idref'])}`);
   }
 
   const getCombinedHtml = async (zip: JSZip, paths: string[]): Promise<string> => {
-    // const htmlParts = await Promise.all(
-    //   paths.map(async(path) => {
-    //     const file = await zip.file(path)?.async('text');
-    //     return file ?? '';
-    //   })
-    // );
-    // return htmlParts.join('\n');
-
-
-    const htmlContent = await zip.file(paths[20])?.async('text');
-    if (!htmlContent) return "";
+    const htmlParts = await Promise.all(
+      paths.map(async (path) => {
+        const htmlContent = await zip.file(path)?.async('text');
+        if (!htmlContent) return "";
 
     const styledHtml = htmlContent.replace(
       /<head[^>]*>/i,
@@ -122,11 +121,12 @@ export default function ReadingScreen() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
       <style>
         body {
-            font-size: 0.8rem !important;
             background-color: ${theme.background};
+            word-break:break-word;
             padding-left:1rem;
             padding-right:1rem;
             color:${theme.text};
+            margin-top: 5rem;
           }
           h2{
             text-align: center;
@@ -135,19 +135,59 @@ export default function ReadingScreen() {
          a {
             font-size: 1.5rem;
             color:${theme.text};
+            text-align:center;
+            display:hidden;
           }
           p{
             color: ${theme.text};
-            text-indent: 2rem;
-            font-size: 1rem
-          }
-          .indented {
-            text-indent: 2rem;
+            text-indent:1rem;
+            text-align:justify;
+            font-size: 0.9rem;
           }
       </style>`
 
     );
-    return styledHtml ?? "";
+        return styledHtml;
+      })
+    );
+    return htmlParts.join('\n');
+
+
+    // const htmlContent = await zip.file(paths[20])?.async('text');
+    // console.log(typeof htmlContent);
+    // if (!htmlContent) return "";
+    //
+    // const styledHtml = htmlContent.replace(
+    //   /<head[^>]*>/i,
+    //   match => `${match}
+    //   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    //   <style>
+    //     body {
+    //         font-size: 0.8rem !important;
+    //         background-color: ${theme.background};
+    //         padding-left:1rem;
+    //         padding-right:1rem;
+    //         color:${theme.text};
+    //       }
+    //       h2{
+    //         text-align: center;
+    //         font-size: 1.5rem;
+    //       }
+    //      a {
+    //         font-size: 1.5rem;
+    //         color:${theme.text};
+    //       }
+    //       p{
+    //         color: ${theme.text};
+    //         text-indent:1rem;
+    //         text-align:justify;
+    //         font-size: 1rem;
+    //       }
+    //   </style>`
+    //
+    // );
+    // console.log("STYLED HTML : " ,styledHtml);
+    // return styledHtml;
 
     // return htmlContent;
   }
