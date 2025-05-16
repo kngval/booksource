@@ -7,14 +7,14 @@
     "scheme": "vivlion",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
-    "edgeToEdgeEnabled":false,
+    "edgeToEdgeEnabled": false,
     "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kngval.vivlion"
     },
     "android": {
-    "edgeToEdgeEnabled":false,
+      "edgeToEdgeEnabled": false,
       "permissions": [
         "READ_EXTERNAL_STORAGE",
         "INTERNET"
@@ -39,7 +39,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "f0d7bac2-7cdf-4601-aa82-70de41755d91"
+        "projectId": "130529e3-e1f4-47c8-bd64-3cb1b37c1293"
       }
     },
     "owner": "kngval"
