@@ -1,11 +1,11 @@
 import { useTheme } from "@/theme/themeContext";
 import { StatusBar, View } from "react-native";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import * as NavigationBar from "expo-navigation-bar"
 import { useEffect } from "react";
 import { LibraryProvider } from "@/books/BookContext";
 import { Stack } from "expo-router";
 import FilterSvg from "@/assets/filterSvg";
+import { SystemBars } from "react-native-edge-to-edge";
 
 //TSX
 export default function Layout() {
@@ -22,13 +22,13 @@ export default function Layout() {
 function RootLayout() {
   const { theme } = useTheme();
   useEffect(() => {
+    SystemBars.setHidden(true);
+    SystemBars.setStyle("auto")
     hideNavBar();
   }, [theme.background])
 
   const hideNavBar = async () => {
-    // await NavigationBar.setBackgroundColorAsync(theme.background);
-    // await NavigationBar.setVisibilityAsync("hidden");
-    // await NavigationBar.setBehaviorAsync("overlay-swipe");
+
     console.log("hiding navs");
   }
   return (
