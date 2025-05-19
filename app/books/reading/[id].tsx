@@ -32,6 +32,7 @@ export default function ReadingScreen() {
       if (!book || !book.path) return;
       console.log("Passed Book : ", book.title)
       console.log("Passed Book ID: ", book.id)
+
       // const cachedSpineRaw = await AsyncStorage.getItem(getSpineCacheKey(book.id));
 
       const unzippedEpub = await unzipEpub(book.path);
@@ -83,20 +84,16 @@ export default function ReadingScreen() {
     });
     const opf = parser.parse(rawOpfText);
 
-    console.log("OPF : ", opf);
-    console.log("MANIFEST : ", opf.package.manifest.item);
 
     const manifest = Array.isArray(opf.package.manifest.item) ? opf.package.manifest.item : [opf.package.manifest.item];
 
     const spine = Array.isArray(opf.package.spine.itemref) ? opf.package.spine.itemref : opf.package.spine.itemref;
-    console.log("SPINE : ", opf.package.spine.itemref);
 
     const idToHref = new Map();
 
     for (const item of manifest) {
       idToHref.set(item['@_id'], item['@_href']);
     }
-    idToHref.forEach(i => console.log("SPINE MAP : ", i));
 
     if (opfPath.includes("/")) {
       const opfBase = opfPath.split('/').slice(0, -1).join('/');
